@@ -26,3 +26,4 @@ class ESCController:
 
     def __del__(self):
         self.pi.set_servo_pulsewidth(self.pin_number, 0)
+        self.pi.stop()
