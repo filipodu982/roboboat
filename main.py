@@ -13,7 +13,7 @@ def read_controller_values():
 
 if __name__ == "__main__":
     controller = ESCController(PIN_NUMBER)
-    server = WebController()
+    server = WebController(controller)
     server.run()
     # while True:
     #     desired_speed = read_controller_values()

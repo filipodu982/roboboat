@@ -2,13 +2,14 @@ from flask import Flask, request, jsonify, render_template_string
 
 
 class WebController:
-    def __init__(self):
+    def __init__(self, controller):
         self.app = Flask(__name__)
         self.app.add_url_rule("/", "index", self.index)
         self.app.add_url_rule(
             "/set_power", "set_power", self.set_power, methods=["POST"]
         )
         self.motor_speed = 0
+        self.controller = controller
 
     def index(self):
         html = """
@@ -50,11 +51,11 @@ class WebController:
         """
         return render_template_string(html)
 
-    def set_power(self, controller):
+    def set_power(self):
         # Handle motor power update
         data = request.get_json()
         self.motor_speed = int(data.get("power", 0))
-        controller.change_motor_speed(self.motor_speed)
+        self.controller.change_motor_speed(self.motor_speed)
         return jsonify({"message": "Motor power set", "speed": self.motor_speed})
 
     def run(self):
