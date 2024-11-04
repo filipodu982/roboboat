@@ -3,7 +3,7 @@ import pigpio
 
 
 class ESCController:
-    MIN_WIDTH = 1000  # Pulse width in us
+    MIN_WIDTH = 700  # Pulse width in us
     MAX_WIDTH = 2000  # Pulse width in us
     PULSE_RANGE = MAX_WIDTH - MIN_WIDTH
 

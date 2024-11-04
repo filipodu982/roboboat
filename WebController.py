@@ -5,9 +5,10 @@ class WebController:
     def __init__(self):
         self.app = Flask(__name__)
         self.app.add_url_rule("/", "index", self.index)
-        # self.app.add_url_rule(
-        #     "/set_power", "set_power", self.set_power, methods=["POST"]
-        # )
+        self.app.add_url_rule(
+            "/set_power", "set_power", self.set_power, methods=["POST"]
+        )
+        self.motor_speed = 0
 
     def index(self):
         html = """
@@ -20,7 +21,7 @@ class WebController:
         </head>
         <body>
             <h2>Motor Control</h2>
-            <input type="range" id="motorSlider" min="0" max="255" value="0">
+            <input type="range" id="motorSlider" min="0" max="100" value="0">
             <p>Motor Power: <span id="powerValue">0</span></p>
             <button onclick="sendMotorPower()">Set Motor Power</button>
 
@@ -48,6 +49,13 @@ class WebController:
         </html>
         """
         return render_template_string(html)
+
+    def set_power(self, controller):
+        # Handle motor power update
+        data = request.get_json()
+        self.motor_speed = int(data.get("power", 0))
+        controller.change_motor_speed(self.motor_speed)
+        return jsonify({"message": "Motor power set", "speed": self.motor_speed})
 
     def run(self):
         self.app.run(host="0.0.0.0", port=5000)
