@@ -6,7 +6,7 @@ PIN_NUMBER = 4
 
 def read_controller_values():
     # TODO Add actual reading of value from joystick
-    desired_speed = 42
+    desired_speed = input("Gimme: ")
     return desired_speed
 
 
