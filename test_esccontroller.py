@@ -27,7 +27,14 @@ class testController(unittest.TestCase):
 
         E.change_motor_speed(150)
 
-        calls = [mock.call(4, 2000), mock.call(4, 1000), mock.call(4, 2000)]
+        E.change_motor_speed(-20)
+
+        calls = [
+            mock.call(4, 2000.0),
+            mock.call(4, 700.0),
+            mock.call(4, 2000.0),
+            mock.call(4, 700.0),
+        ]
         mock_api.set_servo_pulsewidth.assert_has_calls(calls)
 
     @mock.patch("ESCController.pigpio")
