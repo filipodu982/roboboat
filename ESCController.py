@@ -1,5 +1,6 @@
 import sys
 import pigpio
+from unittest import mock
 
 
 class ESCController:
@@ -11,9 +12,6 @@ class ESCController:
         self.pi = pigpio.pi()  # Instance of pigpio class
         self.pin_number = pin_number  # Number of GPIO pin handling a motor
 
-        if not self.pi.connected:
-            sys.exit()
-
     def change_motor_speed(self, speed_percent):
         """Method which converts % of desired motor speed, to pulse width in us"""
         if speed_percent > 100:
@@ -22,7 +20,12 @@ class ESCController:
             speed_percent = 0
 
         desired_pulse_width = (speed_percent / 100) * self.PULSE_RANGE + self.MIN_WIDTH
-        self.pi.set_servo_pulsewidth(self.pin_number, desired_pulse_width)
+
+        # Check if we are actually on RasPi. If not - debug in print
+        if self.pi.connected:
+            self.pi.set_servo_pulsewidth(self.pin_number, desired_pulse_width)
+        else:
+            print(desired_pulse_width)
 
     def __del__(self):
         self.pi.set_servo_pulsewidth(self.pin_number, 0)
